@@ -30,13 +30,8 @@ function App() {
         required
       />
       <div>password</div>
-      <input type="text" className="border border-black" />
-      <input
-        type="submit"
-        value="Log in"
-        className="border border-black"
-        required
-      />
+      <input type="text" className="border border-black" required />
+      <input type="submit" value="Log in" className="border border-black" />
     </form>
   );
 
