@@ -19,6 +19,14 @@ model User {
   //timeSlots TimeSlot[]
 }
 
+model TimeSlotType {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  durationMinutes    Int
+  amountInEuros     String
+  //timeSlots TimeSlot[]
+}
+
 enum Role {
   CLIENT
   PROFESSIONAL

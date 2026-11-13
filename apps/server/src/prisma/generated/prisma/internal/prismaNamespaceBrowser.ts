@@ -51,7 +51,8 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  User: 'User'
+  User: 'User',
+  TimeSlotType: 'TimeSlotType'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -77,6 +78,16 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const TimeSlotTypeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  durationMinutes: 'durationMinutes',
+  amountInEuros: 'amountInEuros'
+} as const
+
+export type TimeSlotTypeScalarFieldEnum = (typeof TimeSlotTypeScalarFieldEnum)[keyof typeof TimeSlotTypeScalarFieldEnum]
 
 
 export const SortOrder = {

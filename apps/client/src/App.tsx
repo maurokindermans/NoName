@@ -1,11 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Calendar } from "@/components/ui/calendar";
-
+import { Button } from "@/components/ui/button";
 function App() {
   const BASE_URL = "http://localhost:8080";
   const [user, setUser] = useState<any>(null);
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const [page, setPage] = useState("");
+  const [types, setTypes] = useState<any[]>([]);
+
+  useEffect(() => {
+    const loop = setInterval(() => {
+      fetch(`${BASE_URL}/types`)
+        .then((response) => response.json())
+        .then((data) => {
+          setTypes(data);
+        });
+    }, 1000);
+
+    return clearInterval(loop);
+  }, []);
+
+  if (page === "My types") {
+    return (
+      <>
+        <div>My types</div>
+        <div>
+          {types.map((current) => {
+            return (
+              <div>
+                <div>{current.name}</div>
+                <div>{current.durationMinutes}</div>
+                <div>{current.amountInEuros}</div>
+              </div>
+            );
+          })}
+        </div>
+        <Button onClick={() => setPage("")}>Go back</Button>
+      </>
+    );
+  }
+
   if (user) {
     return (
       <>
@@ -16,6 +51,9 @@ function App() {
           onSelect={setDate}
           className="rounded-lg border"
         />
+        {user.role === "PROFESSIONAL" && (
+          <Button onClick={() => setPage("My types")}>My types</Button>
+        )}
       </>
     );
   }

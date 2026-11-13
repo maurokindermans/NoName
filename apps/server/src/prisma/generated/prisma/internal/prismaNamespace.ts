@@ -397,7 +397,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-  User: 'User'
+  User: 'User',
+  TimeSlotType: 'TimeSlotType'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -413,7 +414,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user"
+    modelProps: "user" | "timeSlotType"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -491,6 +492,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TimeSlotType: {
+      payload: Prisma.$TimeSlotTypePayload<ExtArgs>
+      fields: Prisma.TimeSlotTypeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TimeSlotTypeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotTypePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TimeSlotTypeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotTypePayload>
+        }
+        findFirst: {
+          args: Prisma.TimeSlotTypeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotTypePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TimeSlotTypeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotTypePayload>
+        }
+        findMany: {
+          args: Prisma.TimeSlotTypeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotTypePayload>[]
+        }
+        create: {
+          args: Prisma.TimeSlotTypeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotTypePayload>
+        }
+        createMany: {
+          args: Prisma.TimeSlotTypeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TimeSlotTypeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotTypePayload>[]
+        }
+        delete: {
+          args: Prisma.TimeSlotTypeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotTypePayload>
+        }
+        update: {
+          args: Prisma.TimeSlotTypeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotTypePayload>
+        }
+        deleteMany: {
+          args: Prisma.TimeSlotTypeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TimeSlotTypeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TimeSlotTypeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotTypePayload>[]
+        }
+        upsert: {
+          args: Prisma.TimeSlotTypeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotTypePayload>
+        }
+        aggregate: {
+          args: Prisma.TimeSlotTypeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTimeSlotType>
+        }
+        groupBy: {
+          args: Prisma.TimeSlotTypeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TimeSlotTypeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TimeSlotTypeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TimeSlotTypeCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -537,6 +612,16 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const TimeSlotTypeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  durationMinutes: 'durationMinutes',
+  amountInEuros: 'amountInEuros'
+} as const
+
+export type TimeSlotTypeScalarFieldEnum = (typeof TimeSlotTypeScalarFieldEnum)[keyof typeof TimeSlotTypeScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -768,6 +853,7 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  timeSlotType?: Prisma.TimeSlotTypeOmit
 }
 
 /* Types for Logging */
