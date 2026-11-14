@@ -28,25 +28,23 @@ export type AggregateTimeSlotType = {
 
 export type TimeSlotTypeAvgAggregateOutputType = {
   id: number | null
-  durationMinutes: number | null
 }
 
 export type TimeSlotTypeSumAggregateOutputType = {
   id: number | null
-  durationMinutes: number | null
 }
 
 export type TimeSlotTypeMinAggregateOutputType = {
   id: number | null
   name: string | null
-  durationMinutes: number | null
+  durationMinutes: string | null
   amountInEuros: string | null
 }
 
 export type TimeSlotTypeMaxAggregateOutputType = {
   id: number | null
   name: string | null
-  durationMinutes: number | null
+  durationMinutes: string | null
   amountInEuros: string | null
 }
 
@@ -61,12 +59,10 @@ export type TimeSlotTypeCountAggregateOutputType = {
 
 export type TimeSlotTypeAvgAggregateInputType = {
   id?: true
-  durationMinutes?: true
 }
 
 export type TimeSlotTypeSumAggregateInputType = {
   id?: true
-  durationMinutes?: true
 }
 
 export type TimeSlotTypeMinAggregateInputType = {
@@ -180,7 +176,7 @@ export type TimeSlotTypeGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 export type TimeSlotTypeGroupByOutputType = {
   id: number
   name: string
-  durationMinutes: number
+  durationMinutes: string
   amountInEuros: string
   _count: TimeSlotTypeCountAggregateOutputType | null
   _avg: TimeSlotTypeAvgAggregateOutputType | null
@@ -210,7 +206,7 @@ export type TimeSlotTypeWhereInput = {
   NOT?: Prisma.TimeSlotTypeWhereInput | Prisma.TimeSlotTypeWhereInput[]
   id?: Prisma.IntFilter<"TimeSlotType"> | number
   name?: Prisma.StringFilter<"TimeSlotType"> | string
-  durationMinutes?: Prisma.IntFilter<"TimeSlotType"> | number
+  durationMinutes?: Prisma.StringFilter<"TimeSlotType"> | string
   amountInEuros?: Prisma.StringFilter<"TimeSlotType"> | string
 }
 
@@ -227,7 +223,7 @@ export type TimeSlotTypeWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.TimeSlotTypeWhereInput | Prisma.TimeSlotTypeWhereInput[]
   OR?: Prisma.TimeSlotTypeWhereInput[]
   NOT?: Prisma.TimeSlotTypeWhereInput | Prisma.TimeSlotTypeWhereInput[]
-  durationMinutes?: Prisma.IntFilter<"TimeSlotType"> | number
+  durationMinutes?: Prisma.StringFilter<"TimeSlotType"> | string
   amountInEuros?: Prisma.StringFilter<"TimeSlotType"> | string
 }, "id" | "name">
 
@@ -249,53 +245,53 @@ export type TimeSlotTypeScalarWhereWithAggregatesInput = {
   NOT?: Prisma.TimeSlotTypeScalarWhereWithAggregatesInput | Prisma.TimeSlotTypeScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"TimeSlotType"> | number
   name?: Prisma.StringWithAggregatesFilter<"TimeSlotType"> | string
-  durationMinutes?: Prisma.IntWithAggregatesFilter<"TimeSlotType"> | number
+  durationMinutes?: Prisma.StringWithAggregatesFilter<"TimeSlotType"> | string
   amountInEuros?: Prisma.StringWithAggregatesFilter<"TimeSlotType"> | string
 }
 
 export type TimeSlotTypeCreateInput = {
   name: string
-  durationMinutes: number
+  durationMinutes: string
   amountInEuros: string
 }
 
 export type TimeSlotTypeUncheckedCreateInput = {
   id?: number
   name: string
-  durationMinutes: number
+  durationMinutes: string
   amountInEuros: string
 }
 
 export type TimeSlotTypeUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  durationMinutes?: Prisma.StringFieldUpdateOperationsInput | string
   amountInEuros?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TimeSlotTypeUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  durationMinutes?: Prisma.StringFieldUpdateOperationsInput | string
   amountInEuros?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TimeSlotTypeCreateManyInput = {
   id?: number
   name: string
-  durationMinutes: number
+  durationMinutes: string
   amountInEuros: string
 }
 
 export type TimeSlotTypeUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  durationMinutes?: Prisma.StringFieldUpdateOperationsInput | string
   amountInEuros?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TimeSlotTypeUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  durationMinutes?: Prisma.StringFieldUpdateOperationsInput | string
   amountInEuros?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -308,7 +304,6 @@ export type TimeSlotTypeCountOrderByAggregateInput = {
 
 export type TimeSlotTypeAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  durationMinutes?: Prisma.SortOrder
 }
 
 export type TimeSlotTypeMaxOrderByAggregateInput = {
@@ -327,7 +322,6 @@ export type TimeSlotTypeMinOrderByAggregateInput = {
 
 export type TimeSlotTypeSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  durationMinutes?: Prisma.SortOrder
 }
 
 
@@ -368,7 +362,7 @@ export type $TimeSlotTypePayload<ExtArgs extends runtime.Types.Extensions.Intern
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     name: string
-    durationMinutes: number
+    durationMinutes: string
     amountInEuros: string
   }, ExtArgs["result"]["timeSlotType"]>
   composites: {}
@@ -795,7 +789,7 @@ export interface Prisma__TimeSlotTypeClient<T, Null = never, ExtArgs extends run
 export interface TimeSlotTypeFieldRefs {
   readonly id: Prisma.FieldRef<"TimeSlotType", 'Int'>
   readonly name: Prisma.FieldRef<"TimeSlotType", 'String'>
-  readonly durationMinutes: Prisma.FieldRef<"TimeSlotType", 'Int'>
+  readonly durationMinutes: Prisma.FieldRef<"TimeSlotType", 'String'>
   readonly amountInEuros: Prisma.FieldRef<"TimeSlotType", 'String'>
 }
     

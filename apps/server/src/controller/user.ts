@@ -8,8 +8,7 @@ const userController = {
     if (user) {
       res.json(user)
     } else {
-      const newUser = await userModel.createUser(req.body)
-      res.json(newUser)
+      res.status(400).json({ error: 'Wrong username or password' })
     }
   },
 }

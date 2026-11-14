@@ -7,7 +7,7 @@ const userModel = {
       where: { email },
     })
   },
-  async createUser(user: User) {
+  async create(user: User) {
     return prisma.user.create({ data: user })
   },
 }

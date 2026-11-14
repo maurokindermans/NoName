@@ -17,6 +17,7 @@ app.get('/', (_: Request, res: Response) => {
 })
 
 app.get('/types', typesController.get)
+app.post('/types', typesController.post)
 
 app.post('/login', userController.login)
 
