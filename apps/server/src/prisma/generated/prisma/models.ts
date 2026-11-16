@@ -10,4 +10,6 @@
  */
 export type * from './models/User'
 export type * from './models/TimeSlotType'
+export type * from './models/TimeSlot'
+export type * from './models/CancelTime'
 export type * from './commonInputTypes'

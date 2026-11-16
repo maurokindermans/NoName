@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, type SubmitEvent } from "react";
 import "./App.css";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
@@ -8,14 +8,25 @@ import { toast } from "sonner";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function App() {
   const BASE_URL = "http://localhost:8080";
   const [user, setUser] = useState<any>(null);
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, setDate] = useState<Date | undefined>(
+    new Date(new Date().setHours(0, 0, 0, 0)),
+  );
   const [page, setPage] = useState("");
   const [types, setTypes] = useState<any[]>([]);
   const [edit, setEdit] = useState<any>(null);
+  const [timeslots, setTimeSlots] = useState<any[]>([]);
 
   useEffect(() => {
     const loop = setInterval(() => {
@@ -32,9 +43,58 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (user.role === "PROFESSIONAL") {
+    if (!user || !date) {
+      setTimeSlots([]);
+      return;
     }
+
+    fetch(`${BASE_URL}/timeslots/${user.role}/${date.toISOString()}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setTimeSlots(data);
+      });
   }, [date, user]);
+
+  if (page === "newTimeSlot") {
+    return (
+      <>
+        <div>{date?.toLocaleString()}</div>
+        <form onSubmit={handleNewTimeSlot} className="">
+          <FieldGroup className=" max-w-sm grid-cols-2 ">
+            <Field>
+              <FieldLabel>Type</FieldLabel>
+              <Select required items={types} name="type">
+                <SelectTrigger className="w-[180px] ">
+                  <SelectValue placeholder="type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {types.map((item) => (
+                      <SelectItem key={item.id} value={item.name}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </Field>
+            <Field>
+              <FieldLabel>Start time</FieldLabel>
+              <Input
+                type="time"
+                name="startTime"
+
+                required
+              />
+            </Field>
+            <Button type="submit" className="border border-black">
+              Log in
+            </Button>
+          </FieldGroup>
+        </form>
+      </>
+    );
+  }
 
   if (page === "My types") {
     return (
@@ -50,7 +110,7 @@ function App() {
                   <div>Price: {current.amountInEuros} €</div>
                   <Button
                     onClick={() => {
-                      handleDelete(current.id);
+                      handleDeleteType(current.id);
                     }}
                   >
                     delete
@@ -165,15 +225,35 @@ function App() {
             <ScrollArea className="w-100 h-120 rounded-md border">
               {!date && (
                 <div className=" text-center">
-                  Select a date to see availability
+                  Select a date to see time slots
                 </div>
               )}
-
               {date && <div className="text-center font-bold">Time slots</div>}
+              {timeslots.map((current) => {
+                return (
+                  <Card key={current.id}>
+                    <CardContent>
+                      <div>Name: {current.type}</div>
+                      <div>Start: {current.startTime} </div>
+                      <div>End: {current.endTime} </div>
+                      {user.role === "PROFESSIONAL" && <Button>cancel</Button>}
+                    </CardContent>
+                  </Card>
+                );
+              })}
 
               <ScrollBar orientation="vertical" />
             </ScrollArea>
-            <Button className="">+</Button>
+            {user.role === "PROFESSIONAL" && (
+              <Button
+                onClick={() => {
+                  setPage("newTimeSlot");
+                }}
+                className=""
+              >
+                +
+              </Button>
+            )}
           </div>
         </div>
       </>
@@ -297,7 +377,7 @@ function App() {
       });
   }
 
-  function handleDelete(id: number) {
+  function handleDeleteType(id: number) {
     fetch(`${BASE_URL}/types`, {
       method: "DELETE",
       body: JSON.stringify({ id }),
@@ -313,6 +393,15 @@ function App() {
           toast.success(data.message, { position: "top-center" });
         }
       });
+  }
+
+  function handleNewTimeSlot(event: React.SubmitEvent) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+    const type = formData.get("type");
+    let startTime = formData.get("startTime");
   }
 }
 

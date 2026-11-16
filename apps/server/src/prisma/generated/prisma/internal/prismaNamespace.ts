@@ -398,7 +398,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
-  TimeSlotType: 'TimeSlotType'
+  TimeSlotType: 'TimeSlotType',
+  TimeSlot: 'TimeSlot',
+  CancelTime: 'CancelTime'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -414,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "timeSlotType"
+    modelProps: "user" | "timeSlotType" | "timeSlot" | "cancelTime"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -566,6 +568,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TimeSlot: {
+      payload: Prisma.$TimeSlotPayload<ExtArgs>
+      fields: Prisma.TimeSlotFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TimeSlotFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TimeSlotFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotPayload>
+        }
+        findFirst: {
+          args: Prisma.TimeSlotFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TimeSlotFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotPayload>
+        }
+        findMany: {
+          args: Prisma.TimeSlotFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotPayload>[]
+        }
+        create: {
+          args: Prisma.TimeSlotCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotPayload>
+        }
+        createMany: {
+          args: Prisma.TimeSlotCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TimeSlotCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotPayload>[]
+        }
+        delete: {
+          args: Prisma.TimeSlotDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotPayload>
+        }
+        update: {
+          args: Prisma.TimeSlotUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotPayload>
+        }
+        deleteMany: {
+          args: Prisma.TimeSlotDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TimeSlotUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TimeSlotUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotPayload>[]
+        }
+        upsert: {
+          args: Prisma.TimeSlotUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimeSlotPayload>
+        }
+        aggregate: {
+          args: Prisma.TimeSlotAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTimeSlot>
+        }
+        groupBy: {
+          args: Prisma.TimeSlotGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TimeSlotGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TimeSlotCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TimeSlotCountAggregateOutputType> | number
+        }
+      }
+    }
+    CancelTime: {
+      payload: Prisma.$CancelTimePayload<ExtArgs>
+      fields: Prisma.CancelTimeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CancelTimeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CancelTimePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CancelTimeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CancelTimePayload>
+        }
+        findFirst: {
+          args: Prisma.CancelTimeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CancelTimePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CancelTimeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CancelTimePayload>
+        }
+        findMany: {
+          args: Prisma.CancelTimeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CancelTimePayload>[]
+        }
+        create: {
+          args: Prisma.CancelTimeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CancelTimePayload>
+        }
+        createMany: {
+          args: Prisma.CancelTimeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CancelTimeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CancelTimePayload>[]
+        }
+        delete: {
+          args: Prisma.CancelTimeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CancelTimePayload>
+        }
+        update: {
+          args: Prisma.CancelTimeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CancelTimePayload>
+        }
+        deleteMany: {
+          args: Prisma.CancelTimeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CancelTimeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CancelTimeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CancelTimePayload>[]
+        }
+        upsert: {
+          args: Prisma.CancelTimeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CancelTimePayload>
+        }
+        aggregate: {
+          args: Prisma.CancelTimeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCancelTime>
+        }
+        groupBy: {
+          args: Prisma.CancelTimeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CancelTimeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CancelTimeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CancelTimeCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -624,6 +774,28 @@ export const TimeSlotTypeScalarFieldEnum = {
 export type TimeSlotTypeScalarFieldEnum = (typeof TimeSlotTypeScalarFieldEnum)[keyof typeof TimeSlotTypeScalarFieldEnum]
 
 
+export const TimeSlotScalarFieldEnum = {
+  id: 'id',
+  typeId: 'typeId',
+  clientId: 'clientId',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  endPrice: 'endPrice',
+  type: 'type',
+  cancelTime: 'cancelTime'
+} as const
+
+export type TimeSlotScalarFieldEnum = (typeof TimeSlotScalarFieldEnum)[keyof typeof TimeSlotScalarFieldEnum]
+
+
+export const CancelTimeScalarFieldEnum = {
+  id: 'id',
+  amountInHours: 'amountInHours'
+} as const
+
+export type CancelTimeScalarFieldEnum = (typeof CancelTimeScalarFieldEnum)[keyof typeof CancelTimeScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -638,6 +810,14 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
 
@@ -685,6 +865,20 @@ export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'Role[]'
  */
 export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DateTime'
+ */
+export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
+ * Reference to a field of type 'DateTime[]'
+ */
+export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 
@@ -854,6 +1048,8 @@ export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaC
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   timeSlotType?: Prisma.TimeSlotTypeOmit
+  timeSlot?: Prisma.TimeSlotOmit
+  cancelTime?: Prisma.CancelTimeOmit
 }
 
 /* Types for Logging */

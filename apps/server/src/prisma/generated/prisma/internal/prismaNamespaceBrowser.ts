@@ -52,7 +52,9 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  TimeSlotType: 'TimeSlotType'
+  TimeSlotType: 'TimeSlotType',
+  TimeSlot: 'TimeSlot',
+  CancelTime: 'CancelTime'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -90,6 +92,28 @@ export const TimeSlotTypeScalarFieldEnum = {
 export type TimeSlotTypeScalarFieldEnum = (typeof TimeSlotTypeScalarFieldEnum)[keyof typeof TimeSlotTypeScalarFieldEnum]
 
 
+export const TimeSlotScalarFieldEnum = {
+  id: 'id',
+  typeId: 'typeId',
+  clientId: 'clientId',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  endPrice: 'endPrice',
+  type: 'type',
+  cancelTime: 'cancelTime'
+} as const
+
+export type TimeSlotScalarFieldEnum = (typeof TimeSlotScalarFieldEnum)[keyof typeof TimeSlotScalarFieldEnum]
+
+
+export const CancelTimeScalarFieldEnum = {
+  id: 'id',
+  amountInHours: 'amountInHours'
+} as const
+
+export type CancelTimeScalarFieldEnum = (typeof CancelTimeScalarFieldEnum)[keyof typeof CancelTimeScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -104,4 +128,12 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

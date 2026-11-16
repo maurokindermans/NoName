@@ -27,3 +27,13 @@ export type User = Prisma.UserModel
  * 
  */
 export type TimeSlotType = Prisma.TimeSlotTypeModel
+/**
+ * Model TimeSlot
+ * 
+ */
+export type TimeSlot = Prisma.TimeSlotModel
+/**
+ * Model CancelTime
+ * 
+ */
+export type CancelTime = Prisma.CancelTimeModel
