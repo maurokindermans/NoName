@@ -18,6 +18,8 @@ app.get('/', (_: Request, res: Response) => {
 
 app.get('/types', typesController.get)
 app.post('/types', typesController.post)
+app.delete('/types', typesController.delete)
+app.put('/types', typesController.put)
 
 app.post('/login', userController.login)
 

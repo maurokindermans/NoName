@@ -15,6 +15,7 @@ function App() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [page, setPage] = useState("");
   const [types, setTypes] = useState<any[]>([]);
+  const [edit, setEdit] = useState<any>(null);
 
   useEffect(() => {
     const loop = setInterval(() => {
@@ -30,6 +31,11 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (user.role === "PROFESSIONAL") {
+    }
+  }, [date, user]);
+
   if (page === "My types") {
     return (
       <>
@@ -42,8 +48,21 @@ function App() {
                   <div>Name: {current.name}</div>
                   <div>Duration: {current.durationMinutes} minutes</div>
                   <div>Price: {current.amountInEuros} €</div>
-                  <Button>delete</Button>
-                  <Button>edit</Button>
+                  <Button
+                    onClick={() => {
+                      handleDelete(current.id);
+                    }}
+                  >
+                    delete
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setEdit(current);
+                      setPage("manageType");
+                    }}
+                  >
+                    edit
+                  </Button>
                 </CardContent>
               </Card>
             );
@@ -51,36 +70,64 @@ function App() {
           <ScrollBar orientation="vertical" />
         </ScrollArea>
         <Button onClick={() => setPage("")}>Go back</Button>
-        <Button onClick={() => setPage("New Type")}>Create type</Button>
+        <Button onClick={() => setPage("manageType")}>Create type</Button>
       </>
     );
   }
 
-  if (page === "New Type") {
+  if (page === "manageType") {
     return (
       <>
-        <div>New Type</div>
-        <form onSubmit={handleNewType} className="">
+        {!edit && <div>New Type</div>}
+        {edit && <div>Edit Type</div>}
+        <form onSubmit={handleManageType} className="">
           <FieldGroup className=" max-w-sm grid-cols-2 ">
             <Field>
               <FieldLabel>Name</FieldLabel>
-              <Input type="text" name="name" required />
+              <Input
+                type="text"
+                defaultValue={edit?.name}
+                name="name"
+                required
+              />
             </Field>
             <Field>
               <FieldLabel>price in euros</FieldLabel>
-              <Input type="number" name="money" step=".01" required />
+              <Input
+                type="number"
+                defaultValue={edit?.amountInEuros}
+                name="money"
+                step=".01"
+                min="0"
+                required
+              />
             </Field>
             <Field>
               <FieldLabel>duration in minutes</FieldLabel>
-              <Input type="number" name="minutes" step="" required />
+              <Input
+                type="number"
+                defaultValue={edit?.durationMinutes}
+                name="minutes"
+                step=""
+                min="0"
+                required
+              />
             </Field>
             <div>
-              <Button type="submit" className="border border-black">
-                Create
-              </Button>
+              {!edit && (
+                <Button type="submit" className="border border-black">
+                  Create
+                </Button>
+              )}
+              {edit && (
+                <Button type="submit" className="border border-black">
+                  Edit
+                </Button>
+              )}
               <Button
                 onClick={() => {
-                  setPage("My Types");
+                  setPage("My types");
+                  setEdit("null");
                 }}
               >
                 Go back
@@ -102,15 +149,33 @@ function App() {
           <Button onClick={() => setUser(null)}>logout</Button>
         </div>
         <Separator />
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={setDate}
-          className="rounded-lg border"
-        />
-        {user.role === "PROFESSIONAL" && (
-          <Button onClick={() => setPage("My types")}>My types</Button>
-        )}
+        <div className="flex justify-around ">
+          <div>
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              className="rounded-lg border"
+            />
+            {user.role === "PROFESSIONAL" && (
+              <Button onClick={() => setPage("My types")}>My types</Button>
+            )}
+          </div>
+          <div>
+            <ScrollArea className="w-100 h-120 rounded-md border">
+              {!date && (
+                <div className=" text-center">
+                  Select a date to see availability
+                </div>
+              )}
+
+              {date && <div className="text-center font-bold">Time slots</div>}
+
+              <ScrollBar orientation="vertical" />
+            </ScrollArea>
+            <Button className="">+</Button>
+          </div>
+        </div>
       </>
     );
   }
@@ -174,7 +239,7 @@ function App() {
       });
   }
 
-  function handleNewType(event: React.SubmitEvent) {
+  function handleManageType(event: React.SubmitEvent) {
     event.preventDefault();
 
     const form = event.target;
@@ -187,6 +252,32 @@ function App() {
 
     const name = formData.get("name");
     const durationMinutes = formData.get("minutes");
+
+    if (edit) {
+      fetch(`${BASE_URL}/types`, {
+        method: "PUT",
+        body: JSON.stringify({
+          id: edit.id,
+          amountInEuros,
+          name,
+          durationMinutes,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.error) {
+            toast.error(data.error, { position: "top-center" });
+          } else {
+            setPage("My types");
+            setEdit(null);
+            toast.success("Type has been edited", { position: "top-center" });
+          }
+        });
+      return;
+    }
 
     fetch(`${BASE_URL}/types`, {
       method: "POST",
@@ -202,6 +293,24 @@ function App() {
         } else {
           setPage("My types");
           toast.success("Type has been created", { position: "top-center" });
+        }
+      });
+  }
+
+  function handleDelete(id: number) {
+    fetch(`${BASE_URL}/types`, {
+      method: "DELETE",
+      body: JSON.stringify({ id }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          toast.error(data.error, { position: "top-center" });
+        } else {
+          toast.success(data.message, { position: "top-center" });
         }
       });
   }
