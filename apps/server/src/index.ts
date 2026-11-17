@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from 'express'
+import express, { Express } from 'express'
 import dotenv from 'dotenv'
 import userController from './controller/user'
 import cors from 'cors'
@@ -22,6 +22,10 @@ app.put('/types', typesController.put)
 
 app.get('/timeslots/:role/:date', timeslotsController.get)
 app.post('/timeslots', timeslotsController.post)
+app.delete('/timeslots', timeslotsController.delete)
+app.put('/timeslots', timeslotsController.put)
+app.get('/timeslots/:clientId', timeslotsController.clientTimeSlots)
+app.put('/timeslots/cancel', timeslotsController.cancelTimeslot)
 
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`)

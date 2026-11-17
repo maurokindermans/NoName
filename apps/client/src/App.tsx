@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type SubmitEvent } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useTheme } from "next-themes";
 
 function App() {
   const BASE_URL = "http://localhost:8080";
@@ -27,20 +28,33 @@ function App() {
   const [types, setTypes] = useState<any[]>([]);
   const [edit, setEdit] = useState<any>(null);
   const [timeslots, setTimeSlots] = useState<any[]>([]);
+  const [cancel, SetCancel] = useState(true);
+  const [clientTimeslots, setClientTimeslots] = useState<any[]>([]);
 
   useEffect(() => {
     const loop = setInterval(() => {
-      fetch(`${BASE_URL}/types`)
-        .then((response) => response.json())
-        .then((data) => {
-          setTypes(data);
-        });
+      if (user !== null) {
+        if (user.role === "PROFESSIONAL") {
+          fetch(`${BASE_URL}/types`)
+            .then((response) => response.json())
+            .then((data) => {
+              setTypes(data);
+            });
+        }
+        if (user.role === "CLIENT") {
+          fetch(`${BASE_URL}/timeslots/${user.id}`)
+            .then((response) => response.json())
+            .then((data) => {
+              setClientTimeslots(data);
+            });
+        }
+      }
     }, 1000);
 
     return () => {
       clearInterval(loop);
     };
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (!user || !date) {
@@ -53,12 +67,59 @@ function App() {
       .then((data) => {
         setTimeSlots(data);
       });
-  }, [date, user]);
+  }, [date, user, cancel]);
+
+  if (page === "timeslots") {
+    return (
+      <>
+        <div>My timeslots</div>
+        <ScrollArea className="w-100 h-60 rounded-md border">
+          {clientTimeslots.map((current) => {
+            const start = new Date(current.startTime);
+            const end = new Date(current.endTime);
+            const options = {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            };
+            return (
+              <Card key={current.id}>
+                <CardContent>
+                  <div>{current.type}</div>
+                  <div>Day: {start.toLocaleDateString("en-GB")}</div>
+                  <div>Start: {start.toLocaleTimeString()}</div>
+                  <div>End: {end.toLocaleTimeString()} </div>
+                  <div>price : {current.endPrice} €</div>
+                  {current.cancelTime && (
+                    <div>
+                      You are able to cancel until ${current.cancelTime} hours
+                      before
+                    </div>
+                  )}
+
+                  <Button
+                    onClick={() => {
+                      handleCancelTimeSlot(current.id);
+                    }}
+                  >
+                    cancel
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
+          <ScrollBar orientation="vertical" />
+        </ScrollArea>
+        <Button onClick={() => setPage("")}>Go back</Button>
+      </>
+    );
+  }
 
   if (page === "newTimeSlot") {
     return (
       <>
-        <div>{date?.toLocaleString()}</div>
+        <div>{date?.toLocaleDateString("en-GB")}</div>
         <form onSubmit={handleNewTimeSlot} className="">
           <FieldGroup className=" max-w-sm grid-cols-2 ">
             <Field>
@@ -87,9 +148,18 @@ function App() {
                 required
               />
             </Field>
-            <Button type="submit" className="border border-black">
-              Log in
-            </Button>
+            <div>
+              <Button type="submit" className="border border-black">
+                Create
+              </Button>
+              <Button
+                onClick={() => {
+                  setPage("");
+                }}
+              >
+                Go back
+              </Button>
+            </div>
           </FieldGroup>
         </form>
       </>
@@ -220,6 +290,9 @@ function App() {
             {user.role === "PROFESSIONAL" && (
               <Button onClick={() => setPage("My types")}>My types</Button>
             )}
+            {user.role !== "PROFESSIONAL" && (
+              <Button onClick={() => setPage("timeslots")}>My timeslots</Button>
+            )}
           </div>
           <div>
             <ScrollArea className="w-100 h-120 rounded-md border">
@@ -230,13 +303,43 @@ function App() {
               )}
               {date && <div className="text-center font-bold">Time slots</div>}
               {timeslots.map((current) => {
+                const start = new Date(current.startTime);
+                const end = new Date(current.endTime);
+
                 return (
                   <Card key={current.id}>
                     <CardContent>
-                      <div>Name: {current.type}</div>
-                      <div>Start: {current.startTime} </div>
-                      <div>End: {current.endTime} </div>
-                      {user.role === "PROFESSIONAL" && <Button>cancel</Button>}
+                      <div>{current.type}</div>
+                      <div>Start: {start.toLocaleTimeString()}</div>
+                      <div>End: {end.toLocaleTimeString()} </div>
+                      <div>price : {current.endPrice} €</div>
+                      {current.cancelTime && (
+                        <div>
+                          You are able to cancel until ${current.cancelTime}{" "}
+                          hours before
+                        </div>
+                      )}
+                      {user.role === "PROFESSIONAL" && (
+                        <div>
+                          client:{" "}
+                          {current.client?.email ||
+                            "No client has booked this time slot "}
+                        </div>
+                      )}
+                      {user.role === "PROFESSIONAL" && (
+                        <Button
+                          onClick={() => {
+                            handleDeleteTimeSlot(current.id);
+                          }}
+                        >
+                          cancel
+                        </Button>
+                      )}
+                      {user.role === "CLIENT" && (
+                        <Button onClick={() => handleBooking(current.id)}>
+                          book
+                        </Button>
+                      )}
                     </CardContent>
                   </Card>
                 );
@@ -398,10 +501,100 @@ function App() {
   function handleNewTimeSlot(event: React.SubmitEvent) {
     event.preventDefault();
 
+    if (!date) {
+      toast.error("Date selected is invalid", { position: "top-center" });
+      return;
+    }
+
     const form = event.target;
     const formData = new FormData(form);
     const type = formData.get("type");
-    let startTime = formData.get("startTime");
+    let startHours: any = formData.get("startTime");
+
+    startHours = startHours.split(":").map((current: string) => {
+      return parseInt(current);
+    });
+
+    let startTime = new Date(date);
+    startTime.setHours(startHours[0], startHours[1]);
+
+    fetch(`${BASE_URL}/timeslots`, {
+      method: "POST",
+      body: JSON.stringify({ type, startTime }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          toast.error(data.error, { position: "top-center" });
+        } else {
+          setPage("");
+          SetCancel(!cancel);
+          toast.success("Timeslot has been created", {
+            position: "top-center",
+          });
+        }
+      });
+  }
+
+  function handleDeleteTimeSlot(id: number) {
+    fetch(`${BASE_URL}/timeslots`, {
+      method: "DELETE",
+      body: JSON.stringify({ id }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          toast.error(data.error, { position: "top-center" });
+        } else {
+          SetCancel(!cancel);
+          toast.success(data.message, { position: "top-center" });
+        }
+      });
+  }
+
+  function handleBooking(id: number) {
+    const clientId = user.id;
+    fetch(`${BASE_URL}/timeslots`, {
+      method: "PUT",
+      body: JSON.stringify({ id, clientId }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          toast.error(data.error, { position: "top-center" });
+        } else {
+          SetCancel(!cancel);
+          toast.success(data.message, { position: "top-center" });
+        }
+      });
+  }
+
+  function handleCancelTimeSlot(id: number) {
+    fetch(`${BASE_URL}/timeslots/cancel`, {
+      method: "PUT",
+      body: JSON.stringify({ id }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          toast.error(data.error, { position: "top-center" });
+        } else {
+          SetCancel(!cancel);
+          toast.success(data.message, { position: "top-center" });
+        }
+      });
   }
 }
 
