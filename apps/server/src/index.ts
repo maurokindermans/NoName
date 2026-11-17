@@ -20,7 +20,7 @@ app.post('/types', typesController.post)
 app.delete('/types', typesController.delete)
 app.put('/types', typesController.put)
 
-app.get('/timeslots/:role/:date', timeslotsController.get)
+app.get('/timeslots/:userid/:date', timeslotsController.get)
 app.post('/timeslots', timeslotsController.post)
 app.delete('/timeslots', timeslotsController.delete)
 app.put('/timeslots', timeslotsController.put)

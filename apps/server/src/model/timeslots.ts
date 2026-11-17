@@ -9,14 +9,9 @@ const timeslotsModel = {
     return prisma.timeSlot.findMany({
       where: { startTime: { gte: date, lt: nextDay } },
       include: { client: true },
-    })
-  },
-  async findAvailableByDate(date: Date) {
-    const nextDay = new Date()
-    nextDay.setHours(0, 0, 0, 0)
-    nextDay.setDate(date.getDate() + 1)
-    return prisma.timeSlot.findMany({
-      where: { clientId: null, startTime: { gte: date, lt: nextDay } },
+      orderBy: {
+        startTime: 'asc',
+      },
     })
   },
   async create(timeSlot: any) {
@@ -42,6 +37,9 @@ const timeslotsModel = {
   async findAllByClientid(clientId: number) {
     return prisma.timeSlot.findMany({
       where: { clientId },
+      orderBy: {
+        startTime: 'asc',
+      },
     })
   },
 }

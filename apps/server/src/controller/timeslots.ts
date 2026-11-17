@@ -3,25 +3,46 @@ import typesModel from '../model/types'
 import timeslotsModel from '../model/timeslots'
 
 import cancelTimeModel from '../model/canceltime'
+import userModel from '../model/user'
 
 const timeslotsController = {
   async get(req: Request, res: Response) {
-    let timeslots
-    if (req.params.role === 'PROFESSIONAL') {
-      if (typeof req.params.date === 'string') {
-        timeslots = await timeslotsModel.findAllByDate(
-          new Date(req.params.date)
-        )
-      }
-    } else {
-      if (typeof req.params.date === 'string') {
-        timeslots = await timeslotsModel.findAvailableByDate(
-          new Date(req.params.date)
-        )
-      }
+    const userId = Number.parseInt(String(req.params.userid))
+
+    // Get user from the database and infer its role
+    const user = await userModel.findById(userId)
+    if (!user) {
+      res.status(404).json({ error: 'user not found' })
+      return
     }
 
-    res.json(timeslots)
+    // We want to get all the timeslots
+    const timeslots = await timeslotsModel.findAllByDate(
+      new Date(String(req.params.date))
+    )
+    // Process timeslots so they don't contain sensitive information
+    // instead, we want to provide status to be: 'claimed|taken|available'
+    const processedSlots = timeslots.map((current) => {
+      if (user.role === 'PROFESSIONAL') {
+        return current
+      } else {
+        let status
+        if ((current.clientId as number) === userId) {
+          status = 'claimed'
+        } else if (current.clientId === null) {
+          status = 'available'
+        } else {
+          status = 'taken'
+        }
+        return {
+          ...current,
+          clientId: undefined,
+          status,
+        }
+      }
+    })
+
+    res.json(processedSlots)
   },
   async post(req: Request, res: Response) {
     let { startTime, type } = req.body

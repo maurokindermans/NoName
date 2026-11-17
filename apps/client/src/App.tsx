@@ -16,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useTheme } from "next-themes";
 
 function App() {
   const BASE_URL = "http://localhost:8080";
@@ -62,7 +61,7 @@ function App() {
       return;
     }
 
-    fetch(`${BASE_URL}/timeslots/${user.role}/${date.toISOString()}`)
+    fetch(`${BASE_URL}/timeslots/${user.id}/${date.toISOString()}`)
       .then((response) => response.json())
       .then((data) => {
         setTimeSlots(data);
@@ -77,12 +76,7 @@ function App() {
           {clientTimeslots.map((current) => {
             const start = new Date(current.startTime);
             const end = new Date(current.endTime);
-            const options = {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            };
+
             return (
               <Card key={current.id}>
                 <CardContent>
@@ -313,6 +307,7 @@ function App() {
                       <div>Start: {start.toLocaleTimeString()}</div>
                       <div>End: {end.toLocaleTimeString()} </div>
                       <div>price : {current.endPrice} €</div>
+
                       {current.cancelTime && (
                         <div>
                           You are able to cancel until ${current.cancelTime}{" "}
@@ -320,26 +315,40 @@ function App() {
                         </div>
                       )}
                       {user.role === "PROFESSIONAL" && (
-                        <div>
-                          client:{" "}
-                          {current.client?.email ||
-                            "No client has booked this time slot "}
-                        </div>
+                        <>
+                          <div>
+                            client:{" "}
+                            {current.client?.email ||
+                              "No client has booked this time slot "}
+                          </div>
+                          <Button
+                            onClick={() => {
+                              handleDeleteTimeSlot(current.id);
+                            }}
+                          >
+                            cancel
+                          </Button>
+                        </>
                       )}
-                      {user.role === "PROFESSIONAL" && (
-                        <Button
-                          onClick={() => {
-                            handleDeleteTimeSlot(current.id);
-                          }}
-                        >
-                          cancel
-                        </Button>
+                      {user.role === "CLIENT" &&
+                        current.status === "available" && (
+                          <Button onClick={() => handleBooking(current.id)}>
+                            Book
+                          </Button>
+                        )}
+                      {user.role === "CLIENT" && current.status === "taken" && (
+                        <>
+                          <Button disabled>Book</Button>
+                          <p className="text-red-600 ">No seats available</p>
+                        </>
                       )}
-                      {user.role === "CLIENT" && (
-                        <Button onClick={() => handleBooking(current.id)}>
-                          book
-                        </Button>
-                      )}
+                      {user.role === "CLIENT" &&
+                        current.status === "claimed" && (
+                          <>
+                            <Button disabled>Book</Button>
+                            <p className="text-green-600 ">Already booked</p>
+                          </>
+                        )}
                     </CardContent>
                   </Card>
                 );
