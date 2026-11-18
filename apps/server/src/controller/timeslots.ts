@@ -124,7 +124,6 @@ const timeslotsController = {
   },
 
   async cancelTimeslot(req: Request, res: Response) {
-    console.log('CANCEL!')
     const timeSlot = await timeslotsModel.findById(req.body.id)
 
     if (timeSlot) {
