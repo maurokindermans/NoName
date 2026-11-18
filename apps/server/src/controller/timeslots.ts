@@ -44,6 +44,7 @@ const timeslotsController = {
 
     res.json(processedSlots)
   },
+
   async post(req: Request, res: Response) {
     let { startTime, type } = req.body
     const timeSlotType = await typesModel.findByName(type)
@@ -52,9 +53,23 @@ const timeslotsController = {
       res.status(400).json({ error: 'Type does not exist' })
       return
     }
-    startTime = new Date(startTime)
 
-    let cancelTime = (await cancelTimeModel.find())?.amountInHours
+    startTime = new Date(startTime)
+    const cancelTimeInhours = (await cancelTimeModel.find())?.amountInHours
+
+    if (cancelTimeInhours === undefined) {
+      res.status(404).json({ error: 'Cancel time not found' })
+      return
+    }
+
+    let cancelTime
+
+    if (cancelTimeInhours === '') {
+      cancelTime = undefined
+    } else {
+      cancelTime = new Date(startTime)
+      cancelTime.setHours(cancelTime.getHours() - parseInt(cancelTimeInhours))
+    }
 
     const typeId = timeSlotType.id
     const endPrice = timeSlotType.amountInEuros
@@ -72,6 +87,7 @@ const timeslotsController = {
     })
     res.json(newTimeSlot)
   },
+
   async delete(req: Request, res: Response) {
     const timeSlot = await timeslotsModel.findById(req.body.id)
     if (timeSlot) {
@@ -81,6 +97,7 @@ const timeslotsController = {
       res.status(400).json({ error: "Time slot doesn't exist" })
     }
   },
+
   async put(req: Request, res: Response) {
     const timeSlot = await timeslotsModel.findById(req.body.id)
     if (timeSlot) {
@@ -88,6 +105,7 @@ const timeslotsController = {
         res.status(400).json({ error: 'Time slot already booked' })
         return
       }
+
       await timeslotsModel.update({
         id: timeSlot.id,
         clientId: req.body.clientId,
@@ -97,20 +115,24 @@ const timeslotsController = {
       res.status(400).json({ error: "Time slot doesn't exist" })
     }
   },
+
   async clientTimeSlots(req: Request, res: Response) {
     const timeslots = await timeslotsModel.findAllByClientid(
       parseInt(String(req.params.clientId))
     )
     res.json(timeslots)
   },
+
   async cancelTimeslot(req: Request, res: Response) {
     console.log('CANCEL!')
     const timeSlot = await timeslotsModel.findById(req.body.id)
+
     if (timeSlot) {
       if (!timeSlot.clientId) {
         res.status(400).json({ error: 'Time slot already canceled' })
         return
       }
+
       await timeslotsModel.update({
         id: timeSlot.id,
         clientId: null,

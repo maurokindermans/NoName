@@ -46,7 +46,7 @@ export type TimeSlotMinAggregateOutputType = {
   endTime: Date | null
   endPrice: string | null
   type: string | null
-  cancelTime: string | null
+  cancelTime: Date | null
 }
 
 export type TimeSlotMaxAggregateOutputType = {
@@ -57,7 +57,7 @@ export type TimeSlotMaxAggregateOutputType = {
   endTime: Date | null
   endPrice: string | null
   type: string | null
-  cancelTime: string | null
+  cancelTime: Date | null
 }
 
 export type TimeSlotCountAggregateOutputType = {
@@ -213,7 +213,7 @@ export type TimeSlotGroupByOutputType = {
   endTime: Date
   endPrice: string
   type: string
-  cancelTime: string
+  cancelTime: Date | null
   _count: TimeSlotCountAggregateOutputType | null
   _avg: TimeSlotAvgAggregateOutputType | null
   _sum: TimeSlotSumAggregateOutputType | null
@@ -247,7 +247,7 @@ export type TimeSlotWhereInput = {
   endTime?: Prisma.DateTimeFilter<"TimeSlot"> | Date | string
   endPrice?: Prisma.StringFilter<"TimeSlot"> | string
   type?: Prisma.StringFilter<"TimeSlot"> | string
-  cancelTime?: Prisma.StringFilter<"TimeSlot"> | string
+  cancelTime?: Prisma.DateTimeNullableFilter<"TimeSlot"> | Date | string | null
   timeSlotType?: Prisma.XOR<Prisma.TimeSlotTypeScalarRelationFilter, Prisma.TimeSlotTypeWhereInput>
   client?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
@@ -260,7 +260,7 @@ export type TimeSlotOrderByWithRelationInput = {
   endTime?: Prisma.SortOrder
   endPrice?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  cancelTime?: Prisma.SortOrder
+  cancelTime?: Prisma.SortOrderInput | Prisma.SortOrder
   timeSlotType?: Prisma.TimeSlotTypeOrderByWithRelationInput
   client?: Prisma.UserOrderByWithRelationInput
 }
@@ -276,7 +276,7 @@ export type TimeSlotWhereUniqueInput = Prisma.AtLeast<{
   endTime?: Prisma.DateTimeFilter<"TimeSlot"> | Date | string
   endPrice?: Prisma.StringFilter<"TimeSlot"> | string
   type?: Prisma.StringFilter<"TimeSlot"> | string
-  cancelTime?: Prisma.StringFilter<"TimeSlot"> | string
+  cancelTime?: Prisma.DateTimeNullableFilter<"TimeSlot"> | Date | string | null
   timeSlotType?: Prisma.XOR<Prisma.TimeSlotTypeScalarRelationFilter, Prisma.TimeSlotTypeWhereInput>
   client?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id">
@@ -289,7 +289,7 @@ export type TimeSlotOrderByWithAggregationInput = {
   endTime?: Prisma.SortOrder
   endPrice?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  cancelTime?: Prisma.SortOrder
+  cancelTime?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TimeSlotCountOrderByAggregateInput
   _avg?: Prisma.TimeSlotAvgOrderByAggregateInput
   _max?: Prisma.TimeSlotMaxOrderByAggregateInput
@@ -308,7 +308,7 @@ export type TimeSlotScalarWhereWithAggregatesInput = {
   endTime?: Prisma.DateTimeWithAggregatesFilter<"TimeSlot"> | Date | string
   endPrice?: Prisma.StringWithAggregatesFilter<"TimeSlot"> | string
   type?: Prisma.StringWithAggregatesFilter<"TimeSlot"> | string
-  cancelTime?: Prisma.StringWithAggregatesFilter<"TimeSlot"> | string
+  cancelTime?: Prisma.DateTimeNullableWithAggregatesFilter<"TimeSlot"> | Date | string | null
 }
 
 export type TimeSlotCreateInput = {
@@ -316,7 +316,7 @@ export type TimeSlotCreateInput = {
   endTime: Date | string
   endPrice: string
   type: string
-  cancelTime: string
+  cancelTime?: Date | string | null
   timeSlotType: Prisma.TimeSlotTypeCreateNestedOneWithoutTimeSlotsInput
   client?: Prisma.UserCreateNestedOneWithoutTimeSlotsInput
 }
@@ -329,7 +329,7 @@ export type TimeSlotUncheckedCreateInput = {
   endTime: Date | string
   endPrice: string
   type: string
-  cancelTime: string
+  cancelTime?: Date | string | null
 }
 
 export type TimeSlotUpdateInput = {
@@ -337,7 +337,7 @@ export type TimeSlotUpdateInput = {
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endPrice?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  cancelTime?: Prisma.StringFieldUpdateOperationsInput | string
+  cancelTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   timeSlotType?: Prisma.TimeSlotTypeUpdateOneRequiredWithoutTimeSlotsNestedInput
   client?: Prisma.UserUpdateOneWithoutTimeSlotsNestedInput
 }
@@ -350,7 +350,7 @@ export type TimeSlotUncheckedUpdateInput = {
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endPrice?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  cancelTime?: Prisma.StringFieldUpdateOperationsInput | string
+  cancelTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TimeSlotCreateManyInput = {
@@ -361,7 +361,7 @@ export type TimeSlotCreateManyInput = {
   endTime: Date | string
   endPrice: string
   type: string
-  cancelTime: string
+  cancelTime?: Date | string | null
 }
 
 export type TimeSlotUpdateManyMutationInput = {
@@ -369,7 +369,7 @@ export type TimeSlotUpdateManyMutationInput = {
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endPrice?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  cancelTime?: Prisma.StringFieldUpdateOperationsInput | string
+  cancelTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TimeSlotUncheckedUpdateManyInput = {
@@ -380,7 +380,7 @@ export type TimeSlotUncheckedUpdateManyInput = {
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endPrice?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  cancelTime?: Prisma.StringFieldUpdateOperationsInput | string
+  cancelTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TimeSlotListRelationFilter = {
@@ -526,6 +526,10 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type NullableIntFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number
@@ -539,7 +543,7 @@ export type TimeSlotCreateWithoutClientInput = {
   endTime: Date | string
   endPrice: string
   type: string
-  cancelTime: string
+  cancelTime?: Date | string | null
   timeSlotType: Prisma.TimeSlotTypeCreateNestedOneWithoutTimeSlotsInput
 }
 
@@ -550,7 +554,7 @@ export type TimeSlotUncheckedCreateWithoutClientInput = {
   endTime: Date | string
   endPrice: string
   type: string
-  cancelTime: string
+  cancelTime?: Date | string | null
 }
 
 export type TimeSlotCreateOrConnectWithoutClientInput = {
@@ -590,7 +594,7 @@ export type TimeSlotScalarWhereInput = {
   endTime?: Prisma.DateTimeFilter<"TimeSlot"> | Date | string
   endPrice?: Prisma.StringFilter<"TimeSlot"> | string
   type?: Prisma.StringFilter<"TimeSlot"> | string
-  cancelTime?: Prisma.StringFilter<"TimeSlot"> | string
+  cancelTime?: Prisma.DateTimeNullableFilter<"TimeSlot"> | Date | string | null
 }
 
 export type TimeSlotCreateWithoutTimeSlotTypeInput = {
@@ -598,7 +602,7 @@ export type TimeSlotCreateWithoutTimeSlotTypeInput = {
   endTime: Date | string
   endPrice: string
   type: string
-  cancelTime: string
+  cancelTime?: Date | string | null
   client?: Prisma.UserCreateNestedOneWithoutTimeSlotsInput
 }
 
@@ -609,7 +613,7 @@ export type TimeSlotUncheckedCreateWithoutTimeSlotTypeInput = {
   endTime: Date | string
   endPrice: string
   type: string
-  cancelTime: string
+  cancelTime?: Date | string | null
 }
 
 export type TimeSlotCreateOrConnectWithoutTimeSlotTypeInput = {
@@ -645,7 +649,7 @@ export type TimeSlotCreateManyClientInput = {
   endTime: Date | string
   endPrice: string
   type: string
-  cancelTime: string
+  cancelTime?: Date | string | null
 }
 
 export type TimeSlotUpdateWithoutClientInput = {
@@ -653,7 +657,7 @@ export type TimeSlotUpdateWithoutClientInput = {
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endPrice?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  cancelTime?: Prisma.StringFieldUpdateOperationsInput | string
+  cancelTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   timeSlotType?: Prisma.TimeSlotTypeUpdateOneRequiredWithoutTimeSlotsNestedInput
 }
 
@@ -664,7 +668,7 @@ export type TimeSlotUncheckedUpdateWithoutClientInput = {
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endPrice?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  cancelTime?: Prisma.StringFieldUpdateOperationsInput | string
+  cancelTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TimeSlotUncheckedUpdateManyWithoutClientInput = {
@@ -674,7 +678,7 @@ export type TimeSlotUncheckedUpdateManyWithoutClientInput = {
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endPrice?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  cancelTime?: Prisma.StringFieldUpdateOperationsInput | string
+  cancelTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TimeSlotCreateManyTimeSlotTypeInput = {
@@ -684,7 +688,7 @@ export type TimeSlotCreateManyTimeSlotTypeInput = {
   endTime: Date | string
   endPrice: string
   type: string
-  cancelTime: string
+  cancelTime?: Date | string | null
 }
 
 export type TimeSlotUpdateWithoutTimeSlotTypeInput = {
@@ -692,7 +696,7 @@ export type TimeSlotUpdateWithoutTimeSlotTypeInput = {
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endPrice?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  cancelTime?: Prisma.StringFieldUpdateOperationsInput | string
+  cancelTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   client?: Prisma.UserUpdateOneWithoutTimeSlotsNestedInput
 }
 
@@ -703,7 +707,7 @@ export type TimeSlotUncheckedUpdateWithoutTimeSlotTypeInput = {
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endPrice?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  cancelTime?: Prisma.StringFieldUpdateOperationsInput | string
+  cancelTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TimeSlotUncheckedUpdateManyWithoutTimeSlotTypeInput = {
@@ -713,7 +717,7 @@ export type TimeSlotUncheckedUpdateManyWithoutTimeSlotTypeInput = {
   endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endPrice?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  cancelTime?: Prisma.StringFieldUpdateOperationsInput | string
+  cancelTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -796,7 +800,7 @@ export type $TimeSlotPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     endTime: Date
     endPrice: string
     type: string
-    cancelTime: string
+    cancelTime: Date | null
   }, ExtArgs["result"]["timeSlot"]>
   composites: {}
 }
@@ -1229,7 +1233,7 @@ export interface TimeSlotFieldRefs {
   readonly endTime: Prisma.FieldRef<"TimeSlot", 'DateTime'>
   readonly endPrice: Prisma.FieldRef<"TimeSlot", 'String'>
   readonly type: Prisma.FieldRef<"TimeSlot", 'String'>
-  readonly cancelTime: Prisma.FieldRef<"TimeSlot", 'String'>
+  readonly cancelTime: Prisma.FieldRef<"TimeSlot", 'DateTime'>
 }
     
 

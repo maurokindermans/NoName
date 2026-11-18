@@ -4,6 +4,7 @@ import userController from './controller/user'
 import cors from 'cors'
 import typesController from './controller/types'
 import timeslotsController from './controller/timeslots'
+import cancelTimeController from './controller/canceltime'
 
 dotenv.config()
 
@@ -26,6 +27,9 @@ app.delete('/timeslots', timeslotsController.delete)
 app.put('/timeslots', timeslotsController.put)
 app.get('/timeslots/:clientId', timeslotsController.clientTimeSlots)
 app.put('/timeslots/cancel', timeslotsController.cancelTimeslot)
+
+app.get('/canceltime', cancelTimeController.get)
+app.put('/canceltime', cancelTimeController.put)
 
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`)

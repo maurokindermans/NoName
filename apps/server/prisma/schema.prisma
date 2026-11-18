@@ -42,7 +42,7 @@ model TimeSlot {
   endTime   DateTime
   endPrice  String
   type  String
-  cancelTime String
+  cancelTime DateTime?
 }
 
 model CancelTime{

@@ -6,6 +6,7 @@ const typesController = {
     const types = await typesModel.findAll()
     res.json(types)
   },
+
   async post(req: Request, res: Response) {
     let type = await typesModel.findByName(req.body.name)
     if (type) {
@@ -15,6 +16,7 @@ const typesController = {
       res.json(type)
     }
   },
+
   async delete(req: Request, res: Response) {
     const type = await typesModel.findById(req.body.id)
     if (type) {
@@ -24,6 +26,7 @@ const typesController = {
       res.status(400).json({ error: "Type doesn't exist" })
     }
   },
+
   async put(req: Request, res: Response) {
     let type = await typesModel.findById(req.body.id)
     if (type) {

@@ -14,19 +14,23 @@ const timeslotsModel = {
       },
     })
   },
+
   async create(timeSlot: any) {
     return prisma.timeSlot.create({ data: timeSlot })
   },
+
   async delete(id: number) {
     return prisma.timeSlot.delete({
       where: { id },
     })
   },
+
   async findById(id: number) {
     return prisma.timeSlot.findUnique({
       where: { id },
     })
   },
+
   async update(timeSlot: any) {
     const { clientId, id } = timeSlot
     return prisma.timeSlot.update({
@@ -34,6 +38,7 @@ const timeslotsModel = {
       data: { clientId },
     })
   },
+
   async findAllByClientid(clientId: number) {
     return prisma.timeSlot.findMany({
       where: { clientId },

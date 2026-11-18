@@ -7,9 +7,11 @@ const userModel = {
       where: { email },
     })
   },
+
   async create(user: User) {
     return prisma.user.create({ data: user })
   },
+
   async findById(id: number) {
     return prisma.user.findUnique({
       where: { id },
