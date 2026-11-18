@@ -349,6 +349,7 @@ function App() {
                 const cancelTime = new Date(current.cancelTime);
                 const now = new Date();
                 const cancelAllow = now < cancelTime;
+                const bookAllow = now < start;
 
                 return (
                   <Card className="bg-gray-100 mx-8 my-4" key={current.id}>
@@ -384,6 +385,7 @@ function App() {
                       {user.role === "CLIENT" &&
                         current.status === "available" && (
                           <Button
+                            disabled={!bookAllow}
                             className="my-2"
                             onClick={() => handleBooking(current.id)}
                           >
