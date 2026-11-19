@@ -348,7 +348,7 @@ function App() {
                 const end = new Date(current.endTime);
                 const cancelTime = new Date(current.cancelTime);
                 const now = new Date();
-                const cancelAllow = now < cancelTime;
+                const cancelAllow = !current.cancelTime || now < cancelTime;
                 const bookAllow = now < start;
 
                 return (
